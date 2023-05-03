@@ -29,6 +29,14 @@ const allFiles = readAllFiles("./Main");
 connection.on("request", (req, res) => {
   console.log("request recieved at 5000 port", req.url);
 
+  if (req.method === 'POST' && req.url === '/delete') {
+    let body = '';
+   req.on('data', chunk => {
+   body += chunk.toString();
+   body = body.split('=')[1]
+   console.log(body,'hi body');
+});
+  }
 
   let content = `<!DOCTYPE html>
   <html lang="en">
@@ -40,7 +48,7 @@ connection.on("request", (req, res) => {
   </head>
   <body>
       <ul>
-      ${allFiles.map((item)=>`<li>${item} name<form><input type="hidden" id="nil" name="fileName" value="${item}"><button>Delete</button></form></li>`)}
+      ${allFiles.map((item)=>`<li>${item} name<form action="/delete" method="POST"><input type="hidden" id="nil" name="fileName" value="${item}"><button>Delete</button></form></li>`)}
       </ul>
   </body>
   </html>`;
